@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Map, TileLayer, Marker, Tooltip, withLeaflet } from "react-leaflet";
 import {
-  useLeafletZoom,
-  useLeafletIsZooming,
-  useLeafletMap
-} from "use-leaflet";
+  Map,
+  TileLayer,
+  Marker,
+  Tooltip,
+  withLeaflet,
+  useLeaflet
+} from "react-leaflet";
+
 import VectorGridDefault from "react-leaflet-vectorgrid";
 import L from "leaflet";
 
@@ -16,10 +19,8 @@ import "./styles.css";
 
 const VectorGrid1 = withLeaflet(VectorGridDefault);
 
-const ZoomTooltip = (props) => {
-  const zoom = useLeafletZoom();
-  const map = useLeafletMap();
-  const isZooming = useLeafletIsZooming();
+const Geoman = (props) => {
+  const { map } = useLeaflet();
 
   map.pm.addControls({
     position: "topleft",
@@ -36,11 +37,7 @@ const ZoomTooltip = (props) => {
     allowSelfIntersection: false
   });
 
-  return (
-    <Tooltip {...props}>
-      {isZooming ? ".....zooming....." : `Zoom = ${zoom}`}
-    </Tooltip>
-  );
+  return null;
 };
 
 const options = {
@@ -49,10 +46,10 @@ const options = {
     "https://terra.b-digital.by/api/terra/projects/1/geometry/vector-tile/{z}/{x}/{y}.pbf",
   vectorTileLayerStyles: {
     default: {
-      weight: 1,
+      weight: 2,
       fillColor: "#c545d3",
       color: "#c545d3",
-      fillOpacity: 0.2,
+      fillOpacity: 0.5,
       opacity: 0.4
     }
   },
@@ -67,11 +64,8 @@ const App = () => (
         attribution="&copy; ArcGIS"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
       /> */}
-      <Marker position={[51.505, -0.091]} />
-      <Marker position={[51.515, -0.081]}>
-        <ZoomTooltip permanent />
-      </Marker>
-      <VectorGrid1 pmIgnore={false} {...options} />
+      <Geoman />
+      <VectorGrid1 {...options} />
     </Map>
   </div>
 );
