@@ -7,6 +7,7 @@ import {
   useLeafletMap
 } from "use-leaflet";
 import VectorGridDefault from "react-leaflet-vectorgrid";
+import L from "leaflet";
 
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
@@ -70,7 +71,7 @@ const App = () => (
       <Marker position={[51.515, -0.081]}>
         <ZoomTooltip permanent />
       </Marker>
-      <VectorGrid1 {...options} />
+      <VectorGrid1 pmIgnore={false} {...options} />
     </Map>
   </div>
 );
