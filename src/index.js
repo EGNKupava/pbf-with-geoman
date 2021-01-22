@@ -6,7 +6,8 @@ import {
   Marker,
   Tooltip,
   withLeaflet,
-  useLeaflet
+  useLeaflet,
+  LayersControl
 } from "react-leaflet";
 
 import VectorGridDefault from "react-leaflet-vectorgrid";
@@ -46,25 +47,33 @@ const options = {
     "https://terra.b-digital.by/api/terra/projects/1/geometry/vector-tile/{z}/{x}/{y}.pbf",
   vectorTileLayerStyles: {
     default: {
-      weight: 2,
-      fillColor: "#c545d3",
-      color: "#c545d3",
+      weight: 1,
+      fillColor: "#FECB56",
       fillOpacity: 0.5,
-      opacity: 0.4
+      fill: true
     }
   },
   subdomains: "abcd",
-  interactive: true
+  interactive: true,
+  zIndex: 1000,
+  minZoom: 13,
+  onClick: (e) => {
+    console.log(e.layer.properties);
+  }
 };
 
 const App = () => (
   <div>
-    <Map center={[55.9172, 39.1699]} zoom={13}>
-      {/* <TileLayer
-        attribution="&copy; ArcGIS"
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-      /> */}
+    <Map center={[55.9172, 39.1699]} zoom={14}>
       <Geoman />
+      <LayersControl position="topright">
+        <LayersControl.Overlay name="ArcGIS">
+          <TileLayer
+            attribution="&copy; ArcGIS"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        </LayersControl.Overlay>
+      </LayersControl>
       <VectorGrid1 {...options} />
     </Map>
   </div>
