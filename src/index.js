@@ -1,71 +1,84 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import {
-  Map,
-  TileLayer,
-  Marker,
-  Tooltip,
-  withLeaflet,
-  useLeaflet,
-  LayersControl
-} from "react-leaflet";
-
-import VectorGridDefault from "react-leaflet-vectorgrid";
+import { Map, TileLayer, LayersControl } from "react-leaflet";
 import L from "leaflet";
+import {
+  createOverlayComponent,
+  createLayerComponent,
+  useLeafletContext
+} from "@react-leaflet/core";
 
-import "@geoman-io/leaflet-geoman-free";
-import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+import "leaflet.vectorgrid";
+
+import isObject from "lodash/isObject";
+import isFunction from "lodash/isFunction";
+import isString from "lodash/isString";
+import isEmpty from "lodash/isEmpty";
+import clone from "lodash/clone";
+import cloneDeep from "lodash/cloneDeep";
+import extend from "lodash/extend";
+import merge from "lodash/merge";
+import has from "lodash/has";
+import find from "lodash/find";
 
 import "./styles.css";
 
-const VectorGrid1 = withLeaflet(VectorGridDefault);
+const url =
+  "https://terra.b-digital.by/api/terra/projects/1/geometry/vector-tile/{z}/{x}/{y}.pbf";
 
-const Geoman = (props) => {
-  const { map } = useLeaflet();
+function Square(props) {
+  const context = useLeafletContext();
 
-  map.pm.addControls({
-    position: "topleft",
-    drawCircle: false,
-    drawRectangle: false,
-    drawMarker: false,
-    drawCircleMarker: false,
-    drawPolyline: false,
-    cutPolygon: false
-  });
+  useEffect(() => {
+    const bounds = L.latLng(props.center).toBounds(props.size);
+    const square = new L.Rectangle(bounds);
+    const container = context.layerContainer || context.map;
+    container.addLayer(square);
 
-  map.pm.setGlobalOptions({
-    snapDistance: 20,
-    allowSelfIntersection: false
+    return () => {
+      container.removeLayer(square);
+    };
   });
 
   return null;
-};
+}
 
-const options = {
-  type: "protobuf",
-  url:
-    "https://terra.b-digital.by/api/terra/projects/1/geometry/vector-tile/{z}/{x}/{y}.pbf",
-  vectorTileLayerStyles: {
-    default: {
-      weight: 1,
-      fillColor: "#FECB56",
-      fillOpacity: 0.5,
-      fill: true
-    }
-  },
-  subdomains: "abcd",
-  interactive: true,
-  zIndex: 1000,
-  minZoom: 13,
-  onClick: (e) => {
-    console.log(e.layer.properties);
-  }
-};
+// function MyVectorGrid(props) {
+//   const context = useLeafletContext();
+//   const { map, pane } = context;
+//   const container = context.layerContainer || context.map;
+
+//   useEffect(() => {
+//     const bounds = L.latLng(props.center).toBounds(props.size);
+//     const square = new L.Rectangle(bounds);
+//     const container = context.layerContainer || context.map;
+//     container.addLayer(square);
+
+//     return () => {
+//       container.removeLayer(square);
+//     };
+//   });
+// const vectorGrid = L.vectorGrid
+//   .protobuf(url, {
+//     vectorTileLayerStyles: {
+//       weight: 0.5,
+//       opacity: 1,
+//       color: "#ccc",
+//       fillColor: "#390870",
+//       fillOpacity: 0.6,
+//       fill: true,
+//       stroke: true
+//     },
+//     interactive: true,
+//     zIndex: 1000
+//   })
+//   .addTo(map);
+
+const center = [55.9172, 39.1699];
 
 const App = () => (
   <div>
-    <Map center={[55.9172, 39.1699]} zoom={14}>
-      <Geoman />
+    <Map center={center} zoom={14}>
       <LayersControl position="topright">
         <LayersControl.Overlay name="ArcGIS">
           <TileLayer
@@ -74,7 +87,8 @@ const App = () => (
           />
         </LayersControl.Overlay>
       </LayersControl>
-      <VectorGrid1 {...options} />
+      {/* <MyVectorGrid /> */}
+      <Square center={center} size={1000} />
     </Map>
   </div>
 );
