@@ -27,7 +27,9 @@ const pbfGridOptions = {
   interactive: true,
   zIndex: 100000,
   minZoom: 14,
+  maxZoom: 21,
   minNativeZoom: 7,
+  maxNativeZoom: 21,
 };
 
 const center = [55.9172, 39.1699];
@@ -57,7 +59,7 @@ const App = () => (
           <ReactLeafletGoogleLayer
             apiKey={API_KEY}
             type={"satellite"}
-            opacity="0.5"
+            opacity="0.6"
           />
         </LayersControl.Overlay>
       </LayersControl>

@@ -32,7 +32,9 @@ export const PBFVectorGrid = (props) => {
     interactive,
     zIndex,
     minZoom,
+    maxZoom,
     minNativeZoom,
+    maxNativeZoom,
     vectorTileLayerStyles,
     getFeatureId: (e) => e.properties.id,
   };
