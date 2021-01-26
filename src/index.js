@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { MapContainer, TileLayer, LayersControl } from "react-leaflet";
 import { useLeafletContext } from "@react-leaflet/core";
@@ -25,7 +25,7 @@ const pbfGridOptions = {
     "https://terra.b-digital.by/api/terra/projects/1/geometry/vector-tile/{z}/{x}/{y}.pbf",
   subdomains: "abcd",
   interactive: true,
-  zIndex: 100000,
+  zIndex: 1000,
   minZoom: 14,
   maxZoom: 21,
   minNativeZoom: 7,
